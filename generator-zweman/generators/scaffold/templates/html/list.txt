@@ -1,0 +1,22 @@
+<table class="table table-responsive">
+    <thead class="thead-default">
+        <% for(var i = 0; i < fields.length; i++){ %>
+        <th><%- fields[i].name -%></th> <% -%>
+        <% } %>
+        <th>Actions</th>
+    </thead>
+    <tbody *ngIf="<%= name.toLowerCase() %>s" >
+        <tr *ngFor="let <%= name.toLowerCase() %> of <%= name.toLowerCase() %>s">
+            <% for(var i = 0; i < fields.length; i++){ -%>
+            <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+            <td>{{<%= name.toLowerCase() %>.<%- fields[i].name -%>}}</td>  
+            <% } else{ -%> 
+            <td><a [routerLink]="['/<%= fields[i].name %>',<%= name.toLowerCase() %>.<%= fields[i].name -%>_id]">{{<%= name.toLowerCase() %>.<%= fields[i].name -%>_id}}</a></td>
+            <% } -%> 
+            <% } -%> 
+            <td><a class="btn btn-sm btn-info" [routerLink]="['/<%= name.toLowerCase() %>',<%= name.toLowerCase() %>.id]"> Show </a>
+            <button class="btn btn-sm btn-warning" (click)="update<%= name %>(<%= name.toLowerCase() %>.id)"> Edit </button>
+            <button class="btn btn-sm btn-danger" (click)="delete<%= name %>(<%= name.toLowerCase() %>.id)"> Delete </button></td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,5 @@
+<% fields.forEach(function(model){ -%>
+<h2><%= model.name -%> List</h2>
+<button class="btn btn-success" [routerLink]="['/<%= model.name.toLowerCase() %>/form']">New <%= model.name -%></button>
+<app-<%= model.name.toLowerCase() %>-list [<%= model.name.toLowerCase() -%>s]="<%= model.name.toLowerCase() -%>s"></app-<%= model.name.toLowerCase() %>-list>
+<% }); %>

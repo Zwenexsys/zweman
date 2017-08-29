@@ -1,0 +1,52 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { RouterModule, Routes } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule} from '@angular/forms';
+
+import { AppComponent } from './app.component';
+import { MainPageComponent } from './components/main-page/main-page.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+
+<% fields.forEach(function(model){ -%>
+import { <%= model.name -%>FormComponent } from './components/<%= model.name.toLowerCase() -%>/<%= model.name.toLowerCase() -%>-form/<%= model.name.toLowerCase() -%>-form.component';
+import { <%= model.name -%>ListComponent } from './components/<%= model.name.toLowerCase() -%>/<%= model.name.toLowerCase() -%>-list/<%= model.name.toLowerCase() -%>-list.component';
+import { <%= model.name -%>DetailsComponent } from './components/<%= model.name.toLowerCase() -%>/<%= model.name.toLowerCase() -%>-details/<%= model.name.toLowerCase() -%>-details.component';
+<% }); -%>
+import { CreateService } from './services/create.service';
+import { ReadService } from './services/read.service';
+import { UpdateService } from './services/update.service';
+import { DeleteService } from './services/delete.service';
+
+
+const appRoutes: Routes = [
+  { path: '', component: MainPageComponent }
+  <% fields.forEach(function(model){ -%>
+  ,{ path: '<%= model.name.toLowerCase() -%>/form', component: <%= model.name -%>FormComponent }
+  ,{ path: '<%= model.name.toLowerCase() -%>/:id', component: <%= model.name -%>DetailsComponent }
+  <% }); -%>
+];
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    MainPageComponent,
+    NavbarComponent
+    <% fields.forEach(function(model){ -%>
+    ,<%= model.name -%>ListComponent
+    ,<%= model.name -%>FormComponent
+    ,<%= model.name -%>DetailsComponent
+    <% }); -%>
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpModule,
+    RouterModule.forRoot(appRoutes)
+  ],
+  providers: [CreateService, ReadService, UpdateService, DeleteService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }

@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="col-lg-6 col-sm-12">
+        <form [formGroup]="add<%= name %>Form" (ngSubmit)="onSubmit()">
+                <% for(var i = 0; i < fields.length; i++){ -%>
+                <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+                <div class="form-group">
+                    <label><%= fields[i].name -%></label>
+                    <div class="input-group">  
+                    <% if(fields[i].type != 'Date'){ -%>
+                        <input class="form-control" type="text" name="<%- fields[i].name -%>" [formControl]="<%- fields[i].name -%>">
+                    <% } else{ -%>
+                    <input class="form-control"  type="date" name="<%- fields[i].name -%>" [formControl]="<%- fields[i].name -%>">
+                    <% } -%>
+                    </div>
+                </div>
+                <% } else{ -%>
+                <div class="form-group">
+                    <label><%= fields[i].name -%>_id</label>
+                    <div class="input-group">    
+                        <input class="form-control" type="text" name="<%- fields[i].name -%>_id" [formControl]="<%- fields[i].name -%>_id">
+                    </div>
+                </div>
+                <% } -%> 
+                <% } -%>
+                <div class="form-group">
+                    <input class="btn btn-primary" [disabled]="add<%= name %>Form.invalid" type="submit" value="Submit">
+                </div>
+        </form>
+    </div>
+</div>

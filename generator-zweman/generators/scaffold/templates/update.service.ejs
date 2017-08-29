@@ -1,0 +1,44 @@
+import { Injectable } from '@angular/core';
+<% fields.forEach(function(model){ -%>
+import { <%= model.name -%> } from '../models/<%= model.name.toLowerCase() -%>.model';
+<% }); -%>
+import { Router, ActivatedRoute, Params} from '@angular/router';
+import { Http,Response,Headers,RequestOptions } from '@angular/http';
+import { Observable} from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
+@Injectable()
+export class UpdateService {
+  public headers = new Headers({ 'Content-Type' : 'application/json'});
+  public options = new RequestOptions({ headers: this.headers });
+
+  constructor(
+    public route: Router,
+    public router: ActivatedRoute,
+    public http: Http
+  ) { }
+  <% fields.forEach(function(model){ -%>
+  update<%= model.name -%>(<%= model.name.toLowerCase() -%>: <%= model.name -%>) {
+    let id: string;
+     this.router.queryParams.subscribe(params => {
+      if (params['id']) {     
+        id = params['id']
+      }   
+    });   
+
+    console.log(id);
+    let url = '<%= model.api_link -%>/update_<%=model.name.toLowerCase() -%>?id=' + id;
+
+      this.http.put(url, <%= model.name.toLowerCase() -%>, this.options)
+        .map((res: Response) => console.log(res.json()))
+        .catch(error => Observable.throw(error.json().error) || 'Server Error').subscribe(res => console.log(res));;
+      this.route.navigate(['/']);
+      window.location.reload();
+}
+<% }); -%>
+}
+
+
+  
+

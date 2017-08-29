@@ -1,0 +1,39 @@
+import { Injectable } from '@angular/core';
+<% fields.forEach(function(model){ -%>
+import { <%= model.name -%> } from '../models/<%= model.name.toLowerCase() -%>.model';
+<% }); -%>
+import { Http, Response, Headers, RequestOptions} from '@angular/http';
+import { Observable} from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
+
+@Injectable()
+export class ReadService {
+
+  public headers = new Headers({
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'PUT, GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'accept, content-type, x-parse-application-id, x-parse-rest-api-key, x-parse-session-token'
+  });
+  public options = new RequestOptions({ headers: this.headers });
+
+  constructor(
+    public http: Http
+  ) { }
+  <% fields.forEach(function(model){ -%>
+  get<%= model.name -%>s() {
+      let url = '<%= model.api_link -%>/<%= model.name.toLowerCase() -%>_list';
+      return this.http.get(url)
+        .map(res => res.json())
+        .catch(error => Observable.throw(error.json().error || 'Server Error'));
+  }
+  get<%= model.name -%>(id) {
+    let url = '<%= model.api_link -%>/<%= model.name.toLowerCase() -%>_show?id='+id;
+      return this.http.get(url)
+        .map(res => res.json())
+        .catch(error => Observable.throw(error.json().error || 'Server Error'));
+  }
+  <% }); -%>
+}

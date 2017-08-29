@@ -1,0 +1,26 @@
+export class <%= name %> {
+    <% fields.forEach(function(i){ %>
+    <% if(i.type == 'string'|| i.type == 'number'||i.type == 'boolean' ||i.type == 'Date'){ -%>
+    <%= i.name -%> : <%= i.type -%>;<%= -%>
+    <% } else{ -%>
+    <%= i.name -%>_id : number;<%= -%>
+    <% } -%>
+    <% }); %>
+    constructor(
+        <% for(var i = 0; i < fields.length; i++){ %>
+        <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+        <%- fields[i].name -%> : <%- fields[i].type -%><% if(i<fields.length-1){ %>,<% } -%>
+        <% } else{ -%>
+        <%= fields[i].name -%>_id : number<% if(i<fields.length-1){ -%>,<% } -%>
+        <% } -%>
+        <% } %>
+    ) {
+        <% fields.forEach(function(i){ %>
+        <% if(i.type == 'string'|| i.type == 'number'||i.type == 'boolean' ||i.type == 'Date'){ -%>
+        this.<%= i.name -%> = <%= i.name -%>;<%=  -%>
+        <% } else{ -%>
+        this.<%= i.name -%>_id = <%= i.name -%>_id;<%=  -%>
+        <% } -%>
+        <% }); %>
+    }
+}

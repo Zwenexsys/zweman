@@ -1,0 +1,113 @@
+import { Component, OnInit } from '@angular/core';
+import { 
+  ReactiveFormsModule,
+  FormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+  FormBuilder
+} from '@angular/forms';
+import { Router, ActivatedRoute, Params} from '@angular/router';
+
+import { <%= name %> } from '../../../models/<%= name.toLowerCase() %>.model';
+import { CreateService } from '../../../services/create.service';
+import { ReadService } from '../../../services/read.service';
+import { UpdateService } from '../../../services/update.service';
+
+@Component({
+  selector: 'app-<%= name.toLowerCase() %>-form',
+  templateUrl: './<%= name.toLowerCase() %>-form.component.html'
+})
+
+
+
+export class <%= name %>FormComponent implements OnInit {
+<% for(var i = 0; i < fields.length; i++) {%>
+<% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+  public <%- fields[i].name -%> : FormControl;<%= -%>
+<% } else{ -%>
+public <%- fields[i].name -%>_id : FormControl;<%= -%>
+<% } -%>
+<% } -%>
+
+  public add<%= name %>Form: FormGroup;
+  public <%= name.toLowerCase() -%>: <%= name -%>;
+
+  constructor(
+    public route: ActivatedRoute,
+    public formBuilder: FormBuilder,
+    public createService: CreateService,
+    public updateService: UpdateService,
+    public readService: ReadService
+  ) { }
+
+  ngOnInit(){
+  
+  <% for(var i = 0; i < fields.length; i++) { -%>
+  <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+    this.<%- fields[i].name -%> = new FormControl('', [
+      Validators.required
+    ]);
+  <% } else{ -%>
+    this.<%- fields[i].name -%>_id = new FormControl('', [
+      Validators.required
+    ]);
+  <% } -%>
+  <% } -%>
+    this.route.queryParams.subscribe(params => {
+      if (params['id']) {
+       this.readService.get<%= name %>(params['id']).subscribe(res=>{ 
+        this.<%= name.toLowerCase() %> = res;
+        <% for(var i = 0; i < fields.length; i++) { -%>
+        <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+        this.<%- fields[i].name %>.setValue(this.<%= name.toLowerCase() %>.<%- fields[i].name -%>);
+        <% } else{ -%>
+        this.<%- fields[i].name %>_id.setValue(this.<%= name.toLowerCase() %>.<%- fields[i].name -%>_id);
+        <% } -%>
+        <% } -%>
+      });
+        
+      }
+      else
+        this.<%= name.toLowerCase() %> = null;
+    }); 
+
+  this.buildForm();
+  }
+
+  buildForm(): void {
+    this.add<%= name %>Form = this.formBuilder.group({
+      <% for(var i = 0; i < fields.length; i++) {%>
+      <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+        <%- fields[i].name -%> : this.<%- fields[i].name -%><% if(i < fields.length - 1) { %>, <% } -%>
+      <% } else{ -%>
+        <%- fields[i].name -%>_id : this.<%- fields[i].name -%>_id<% if(i < fields.length - 1) { %>, <% } -%>
+      <% } -%>
+      <% } %>
+    });
+  }
+
+  onSubmit() {
+    let <%= name.toLowerCase() %>: <%= name %>;
+
+      <%= name.toLowerCase() %> = new <%= name %>(
+        <% for(var i = 0; i < fields.length; i++) {%>
+        <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+        this.<%- fields[i].name -%>.value<% if(i < fields.length - 1) { %>, <% } -%>
+        <% } else{ -%>
+        this.<%- fields[i].name -%>_id.value<% if(i < fields.length - 1) { %>, <% } -%>
+        <% } -%>
+        <% } %>
+      );
+
+    if (this.<%= name.toLowerCase() %>)
+      this.updateService.update<%= name %>(<%= name.toLowerCase() %>);
+    else
+      this.createService.create<%= name %>(<%= name.toLowerCase() %>);
+  }
+}
+
+
+
+
+

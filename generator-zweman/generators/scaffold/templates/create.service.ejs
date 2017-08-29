@@ -1,0 +1,33 @@
+import { Injectable } from '@angular/core';
+<% fields.forEach(function(model){ -%>
+import { <%= model.name -%> } from '../models/<%= model.name.toLowerCase() -%>.model';
+<% }); -%>
+import { Router } from '@angular/router';
+import { Http, Response, Headers, RequestOptions} from '@angular/http';
+import { Observable} from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+
+@Injectable()
+export class CreateService {
+  public headers = new Headers({ 'Content-Type': 'application/json' });
+  public options = new RequestOptions({ headers: this.headers });
+
+  constructor(
+    public router: Router,
+    public http: Http
+  ) { }
+  <% fields.forEach(function(model){ %>
+  create<%= model.name %>(<%= model.name %>) {
+      console.log(<%= model.name %>);
+
+      let url = '<%= model.api_link %>/post_<%= model.name.toLowerCase() -%>';
+
+      this.http.post(url, <%= model.name %>, this.options)
+        .map((res: Response) => console.log(res.json()))
+        .catch(error => Observable.throw(error.json().error) || 'Server Error').subscribe(res => console.log(res));;
+      this.router.navigate(['/']);
+      window.location.reload();
+  }
+  <% }); %>
+}

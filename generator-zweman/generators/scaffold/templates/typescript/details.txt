@@ -1,0 +1,46 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ReadService } from '../../../services/read.service';
+import { <%= name %> } from '../../../models/<%= name.toLowerCase() %>.model';
+<% relations.forEach(rel =>{ -%>
+<% if(rel.belongsTo == name){ -%>
+import { <%= rel.object %> } from '../../../models/<%= rel.object.toLowerCase() %>.model';
+<% } -%>
+<% }) -%>
+@Component({
+  selector: 'app-<%= name.toLowerCase() %>-details',
+  templateUrl: './<%= name.toLowerCase() %>-details.component.html'
+})
+
+export class <%= name %>DetailsComponent implements OnInit {
+    public <%= name.toLowerCase() %> : <%= name %>;
+    <% relations.forEach(rel =>{ -%>
+    <% if(rel.belongsTo == name){ -%>
+    public <%= rel.object.toLowerCase() %>s : <%= rel.object %>[]=[];
+    <% } -%>
+    <% }) -%>
+
+    constructor(
+        public route : ActivatedRoute,
+        public readService : ReadService
+    ){}
+
+    ngOnInit(){
+        this.route.params.subscribe(params => {
+
+            this.readService.get<%= name %>(params['id']).subscribe(res => {
+                this.<%= name.toLowerCase() -%> = res;
+                <% relations.forEach(rel =>{ -%>
+                <% if(rel.belongsTo == name){ -%>
+                this.readService.get<%= rel.object -%>s().subscribe( res => {
+                    res.forEach(element => {
+                        if(element.<%= name.toLowerCase() %>_id == this.<%= name.toLowerCase() %>.id)
+                            this.<%= rel.object.toLowerCase() -%>s.push(element);
+                    });
+                });
+                <% } -%>
+                <% }) -%>
+            });
+        });
+    }
+}

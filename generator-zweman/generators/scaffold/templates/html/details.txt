@@ -1,0 +1,21 @@
+<div class="container">
+    <h3><%= name %></h3>
+    <table class="table" *ngIf="<%= name.toLowerCase() %>">
+        <% for(var i = 0; i < fields.length; i++) { %>
+        <tr>
+            <% if(fields[i].type == 'string'|| fields[i].type == 'number'||fields[i].type == 'boolean' ||fields[i].type == 'Date'){ -%>
+            <td><%= fields[i].name -%>:</td>
+            <td>{{<%= name.toLowerCase() %>.<%- fields[i].name -%>}}</td>
+            <% } else{ -%>
+            <td><%= fields[i].name -%>_id:</td>
+            <td>{{<%= name.toLowerCase() %>.<%- fields[i].name -%>_id}}</td>
+            <% } -%>
+        </tr>
+        <% } %>
+    </table>
+    <% relations.forEach(rel =>{ -%>
+    <% if(rel.belongsTo == name){ -%>
+        <app-<%= rel.object.toLowerCase() %>-list [<%= rel.object.toLowerCase() %>s]="<%= rel.object.toLowerCase() %>s"></app-<%= rel.object.toLowerCase() %>-list>
+    <% } -%>
+    <% }) -%>
+</div>

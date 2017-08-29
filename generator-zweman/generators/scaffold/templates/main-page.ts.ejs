@@ -1,0 +1,27 @@
+import { Component, OnInit } from '@angular/core';
+import { ReadService } from '../../services/read.service';
+<% fields.forEach(function(model){ -%>
+import { <%= model.name -%> } from '../../models/<%= model.name.toLowerCase() -%>.model';
+<% }); %>
+
+@Component({
+  selector: 'app-main-page',
+  templateUrl: './main-page.component.html'
+})
+export class MainPageComponent implements OnInit {
+  <% fields.forEach(function(model){ -%>
+  public <%= model.name.toLowerCase() -%>s : <%= model.name -%>[];
+  <% }); %>
+  constructor(
+    public readService : ReadService
+  ) { }
+
+  ngOnInit() {
+    <% fields.forEach(function(model){ -%>
+    this.readService.get<%= model.name -%>s().subscribe(res=>{
+      this.<%= model.name.toLowerCase() -%>s = res;
+    });
+    <% }); %>
+  }
+
+}
