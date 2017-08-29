@@ -1,12 +1,12 @@
 {
   "name": "generator-zweman",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Angular-Rails UI Generator",
-  "homepage": "",
+  "homepage": "https://github.com/Zwenexsys/zweman",
   "author": {
-    "name": "zwenex",
-    "email": "blacknight.mm@gmail.com",
-    "url": ""
+    "name": "Zwenexsys",
+    "email": "contact@zwenex.com",
+    "url": "http://www.zwenex.com/"
   },
   "files": [
     "generators"
@@ -49,6 +49,6 @@
       "node": true
     }
   },
-  "repository": "https://miles-pudge-halter@bitbucket.org/miles-pudge-halter/zweman.git",
+  "repository": "https://github.com/Zwenexsys/zweman",
   "license": "MIT"
 }
