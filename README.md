@@ -47,7 +47,7 @@ yo zweman:model Author id:number name:string email:string
 yo zweman:model Book id:number title:string author:Author publication_date:Date stock:boolean
 ```
 #### API
-You only need the provide one URL for all CRUD processes like ``` http://192.168.0.112:4000/api/v1 ```
+You only need to provide one URL for all CRUD processes like ``` http://192.168.0.112:4000/api/v1 ```
 
 ---
 
