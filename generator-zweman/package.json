@@ -1,7 +1,7 @@
 {
   "name": "generator-zweman",
   "version": "1.0.0",
-  "description": "Angular-Rails UI Generator",
+  "description": "Yeoman Angular Generator with REST API",
   "homepage": "https://github.com/Zwenexsys/zweman",
   "author": {
     "name": "Zwenexsys",
